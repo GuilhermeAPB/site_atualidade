@@ -1,0 +1,30 @@
+name: Rodar Código de Notícias e Telegram
+
+on:
+  push:
+    branches:
+      - main  # Isso faz o código rodar sempre que você enviar uma atualização para o "main" (ramo principal)
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Vai rodar no servidor do GitHub
+
+    steps:
+      - name: Fazer o check-out do código
+        uses: actions/checkout@v2
+
+      - name: Configurar Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Instalar dependências
+        run: |
+          pip install -r requirements.txt  # Vai instalar as bibliotecas necessárias do seu código
+
+      - name: Rodar o script Python
+        run: |
+          python seu_script.py  # Altere "seu_script.py" para o nome do seu arquivo Python
+        env:
+          TELEGRAM_API_KEY: ${{ secrets.TELEGRAM_API_KEY_SECRET }}  # Aqui, você passa a chave secreta do Telegram
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY_SECRET }}  # Aqui, você passa a chave secreta das notícias
