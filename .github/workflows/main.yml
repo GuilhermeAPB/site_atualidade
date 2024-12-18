@@ -3,11 +3,11 @@ name: Rodar Código de Notícias e Telegram (Run Bot)
 on:
   push:
     branches:
-      - main  # Isso faz o código rodar sempre que você enviar uma atualização para o "main" (ramo principal)
+      - main # Isso faz o código rodar sempre que você enviar uma atualização para o "main" (ramo principal)
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Vai rodar no servidor do GitHub
+    runs-on: ubuntu-latest # Vai rodar no servidor do GitHub
 
     steps:
       - name: Fazer o check-out do código (Checkout repository)
@@ -16,7 +16,7 @@ jobs:
       - name: Configurar Python (Set up Python)
         uses: actions/setup-python@v2
         with:
-          python-version: '3.9'
+          python-version: "3.9"
 
       - name: Instalar dependências
         run: |
@@ -28,7 +28,6 @@ jobs:
           #python seu_script.py  # Altere "seu_script.py" para o nome do seu arquivo Python
           python main.py
         env:
-          #TELEGRAM_API_KEY: ${{ secrets.TELEGRAM_API_KEY_SECRET }}  # Aqui, você passa a chave secreta do Telegram
-          #OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY_SECRET }}  # Aqui, você passa a chave secreta das notícias
-          TELEGRAM_API_KEY_SECRET: ${{ secrets.TELEGRAM_API_KEY_SECRET }}
-          OPENAI_API_KEY_SECRET: ${{ secrets.OPENAI_API_KEY_SECRET }}
+          TELEGRAM_API_KEY: ${{ secrets.TELEGRAM_API_KEY_SECRET }} # Aqui, você passa a chave secreta do Telegram
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY_SECRET }} # Aqui, você passa a chave secreta das notícias
+
