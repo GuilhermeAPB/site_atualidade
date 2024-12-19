@@ -1,10 +1,9 @@
-import logging
+from utils import noticias_db, logger
 
-logger = logging.getLogger(__name__)
+async def enviar_noticias(update):
+    noticias = noticias_db[-5:]  # Pegando as últimas 5 notícias
 
-async def enviar_noticias(update, noticias_db):
-    noticias = noticias_db[-5:]
-
+    # Enviar cada notícia separada com um layout mais organizado
     for noticia in noticias:
         news_message = (
             f"<pre>"
@@ -18,6 +17,7 @@ async def enviar_noticias(update, noticias_db):
             f"</pre>"
         )
 
+        # Envia a mensagem formatada
         try:
             await update.message.reply_text(news_message, parse_mode='HTML', disable_web_page_preview=True)
         except Exception as e:

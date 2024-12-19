@@ -1,7 +1,6 @@
 import requests
-import logging
-
-logger = logging.getLogger(__name__)
+import asyncio
+from utils import logger
 
 async def retry_request(url, retries=3, delay=5):
     headers = {
@@ -9,13 +8,13 @@ async def retry_request(url, retries=3, delay=5):
     }
     for attempt in range(retries):
         try:
-            response = requests.get(url, headers=headers, verify=False)
-            response.raise_for_status()
+            response = requests.get(url, headers=headers, verify=False)  # Desabilita verificação SSL
+            response.raise_for_status()  # Verifica se a resposta foi bem sucedida
             return response
         except requests.exceptions.RequestException as e:
             if attempt < retries - 1:
                 logger.warning(f"Falha ao tentar acessar {url}. Tentando novamente... (Tentativa {attempt + 1}/{retries})")
-                await asyncio.sleep(delay)
+                await asyncio.sleep(delay)  # Espera antes de tentar novamente
             else:
                 logger.error(f"Falha ao acessar {url}. Erro: {e}")
-                raise
+                raise  # Relevanta o erro após o número máximo de tentativas

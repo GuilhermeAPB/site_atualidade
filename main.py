@@ -1,33 +1,29 @@
-import nest_asyncio
-import asyncio
-from telegram.ext import Application, CommandHandler
-from bot.news_fetcher import buscar_noticias
-from bot.rewriter import reescrever_noticia
-from bot.telegram_bot import enviar_noticias, reescrever
-from config import TELEGRAM_API_KEY, OPENAI_API_KEY
-import openai
-from bot.handlers import setup_handlers
-
+from telegram import Update
+from telegram.ext import Application, CommandHandler, CallbackContext
 from funcionalidades.buscar_noticias import buscar_noticias
-from funcionalidades.retry_request import retry_request
-from funcionalidades.reescrever_noticia import reescrever_noticia
+from funcionalidades.reescrever_noticia import reescrever
 from funcionalidades.limpar_banco import limpar_banco
 from funcionalidades.apagar_materia import apagar_materia
-from funcionalidades.enviar_noticias import enviar_noticias
+from funcionalidades.enviar_noticias import enviar_noticias_continuamente
+from funcionalidades.ajuda import ajuda
 
-# Aplica o ajuste para o loop de eventos no Google Colab
-nest_asyncio.apply()
-
-openai.api_key = OPENAI_API_KEY
-
-# Função principal para rodar o bot
 async def main():
-    application = Application.builder().token(TELEGRAM_API_KEY).build()
+    application = Application.builder().token("SEU_TOKEN_AQUI").build()
 
-    setup_handlers(application)
+    # Handlers de comandos
+    application.add_handler(CommandHandler("start", buscar_noticias))  # Iniciar ao enviar o comando /start
+    application.add_handler(CommandHandler("buscar", buscar_noticias))
+    application.add_handler(CommandHandler("reescreva", reescrever))
+    application.add_handler(CommandHandler("limpar", limpar_banco))
+    application.add_handler(CommandHandler("apagar", apagar_materia))
+    application.add_handler(CommandHandler("ajuda", ajuda))
 
-    # Iniciar o bot
+    # Iniciar o envio contínuo de notícias
+    application.job_queue.run_repeating(enviar_noticias_continuamente, interval=600, first=0)
+
+    # Executar o bot
     await application.run_polling()
 
 if __name__ == '__main__':
+    import asyncio
     asyncio.run(main())
