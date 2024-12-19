@@ -2,6 +2,24 @@
 Esse projeto está sendo desenvolvido para otimizar o tempo e automatizar o processo de busca e publicação de noticias em um site que fala sobre as atualidades no Brasil. 
 
 ---
+site_atualidade/
+│
+├── funcionalidades/
+│   ├── __init__.py
+│   ├── buscar_noticias.py
+│   ├── retry_request.py
+│   ├── reescrever_noticia.py
+│   ├── limpar_banco.py
+│   ├── apagar_materia.py
+│   ├── enviar_noticias.py
+│
+├── utils.py
+├── main.py
+├── requirements.txt
+├── .env
+├── README.md
+
+---
 
 # **Site Atualidade - Bot do Telegram**
 
